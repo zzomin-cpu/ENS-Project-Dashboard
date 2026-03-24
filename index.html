@@ -287,9 +287,9 @@ body::before{content:'';position:fixed;inset:0;
 .file-chip .file-icon{font-size:13px;flex-shrink:0}
 .file-chip .file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .file-chips-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.file-upload-zone{border:1px dashed var(--b2);border-radius:8px;padding:12px;
-  text-align:center;font-size:11px;color:var(--t2);cursor:pointer;transition:all .15s}
-.file-upload-zone:hover{border-color:var(--c1);color:var(--c1)}
+.file-upload-zone{background:transparent;border:1px solid var(--b2);border-radius:8px;padding:12px;
+  text-align:center;font-size:11px;color:var(--t1);cursor:pointer;transition:all .15s}
+.file-upload-zone:hover{border-color:var(--b3);color:var(--t0);background:var(--s2)}
 
 /* ── PDF 뷰어 오버레이 ── */
 #fileViewer{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);
@@ -394,6 +394,7 @@ body::before{content:'';position:fixed;inset:0;
 .subtask-input{background:var(--s3);border:1px solid var(--b1);border-radius:5px;
   padding:3px 8px;font-size:11px;color:var(--t0);font-family:var(--mono);
   width:160px;outline:none;transition:border-color .15s}
+.subtask-input[type="date"]{width:150px;min-width:150px;font-family:var(--sans);letter-spacing:normal}
 .subtask-input:focus{border-color:var(--c1)}
 .subtask-file-btn{font-size:10px;padding:2px 8px;border-radius:5px;cursor:pointer;
   background:var(--s3);border:1px solid var(--b1);color:var(--t2);transition:all .15s;white-space:nowrap}
@@ -418,7 +419,12 @@ body::before{content:'';position:fixed;inset:0;
 .proj-period-btn:hover{background:var(--s3);color:var(--t1)}
 .proj-period-btn.active{background:var(--c1);color:#000;font-weight:700}
 
-.vm-table{width:100%;border-collapse:collapse}
+.proj-search{background:var(--s2);border:1px solid var(--b1);border-radius:8px;
+  padding:6px 12px 6px 32px;color:var(--t0);font-size:12px;width:200px;outline:none;
+  transition:border-color .15s;font-family:var(--sans)}
+.proj-search:focus{border-color:var(--c1);width:240px}
+.proj-search-wrap{position:relative;display:flex;align-items:center}
+.proj-search-wrap::before{content:'🔍';position:absolute;left:9px;font-size:11px;pointer-events:none}
 .vm-table th{background:var(--s2);padding:9px 14px;font-size:10px;font-weight:600;color:var(--t2);text-align:left;border-bottom:1px solid var(--b1);white-space:nowrap}
 .vm-table td{padding:10px 14px;font-size:12px;border-bottom:1px solid rgba(31,37,53,.4);color:var(--t1);vertical-align:middle}
 .vm-table tr:hover td{background:rgba(255,255,255,.02)}
@@ -520,8 +526,7 @@ body::before{content:'';position:fixed;inset:0;
         <div style="display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;align-items:center">
           <div style="display:flex;align-items:center;gap:5px">
             <label style="cursor:pointer">
-              <div class="btn" style="background:var(--c2);color:#fff;border:none;font-size:12px;
-                padding:7px 14px;border-radius:8px;cursor:pointer;white-space:nowrap">📄 계약서 업로드</div>
+              <div class="btn btn-ghost" style="font-size:12px;padding:7px 14px;white-space:nowrap;border-color:rgba(91,156,246,.4);color:var(--c2)">📄 계약서 업로드</div>
               <input type="file" id="contractFileInput" accept=".pdf,.doc,.docx,.hwp,.hwpx,.png,.jpg,.jpeg"
                 style="display:none" onchange="analyzeContract(this)">
             </label>
@@ -574,9 +579,9 @@ body::before{content:'';position:fixed;inset:0;
             style="border-color:rgba(62,207,142,.3)">
           <div style="font-size:10px;color:var(--t2);margin-top:4px">💡 매출·매입 계약명이 달라도 하나의 프로젝트명으로 통합 관리됩니다.</div>
         </div>
-        <div class="form-row"><label>매출 계약명 <span style="font-size:10px;color:var(--t2);font-weight:400">(계약서상 정식 명칭 · 계약서 AI 분석 시 자동 입력)</span></label>
+        <div class="form-row"><label>매출 계약명 <span style="color:var(--red);font-size:10px">*</span> <span style="font-size:10px;color:var(--t2);font-weight:400">(계약서상 정식 명칭 · 계약서 AI 분석 시 자동 입력)</span></label>
           <input type="text" id="f_contract_name" placeholder="계약서 업로드 시 자동 입력됩니다"></div>
-        <div class="form-row"><label>기안서명 <span style="font-size:10px;color:var(--t2);font-weight:400">(기안서 업로드 시 자동 입력)</span></label>
+        <div class="form-row"><label>기안서명 <span style="color:var(--red);font-size:10px">*</span> <span style="font-size:10px;color:var(--t2);font-weight:400">(기안서 업로드 시 자동 입력)</span></label>
           <input type="text" id="f_draft_name" placeholder="기안서 업로드 시 자동 입력됩니다"></div>
         <div class="form-2col">
           <div class="form-row"><label>발주처 (고객사) <span style="color:var(--red);font-size:10px">*</span></label>
@@ -591,7 +596,7 @@ body::before{content:'';position:fixed;inset:0;
         <div class="form-2col">
           <div class="form-row"><label>계약금액 (원) <span style="color:var(--red);font-size:10px">*</span></label>
             <input type="text" id="f_amount" placeholder="예) 500,000,000" inputmode="numeric" oninput="formatAmtInput(this);recalcAllBillings(&quot;billingList&quot;,&quot;f_amount&quot;,&quot;b_pct&quot;,&quot;b_amount&quot;)"></div>
-          <div class="form-row"><label>사업유형</label>
+          <div class="form-row"><label>사업유형 <span style="color:var(--red);font-size:10px">*</span></label>
             <select id="f_biz_type">
               <option value="">선택</option>
               <option value="SI">SI (구축)</option>
@@ -602,7 +607,7 @@ body::before{content:'';position:fixed;inset:0;
             </select></div>
         </div>
         <div class="form-2col">
-          <div class="form-row"><label>부문 (코스트센터)</label>
+          <div class="form-row"><label>부문 (코스트센터) <span style="color:var(--red);font-size:10px">*</span></label>
             <select id="f_cc">
               <option value="">선택</option>
               <option value="51001">51001 · 경영지원부문 경영지원팀</option>
@@ -614,13 +619,13 @@ body::before{content:'';position:fixed;inset:0;
               <option value="54002">54002 · DT전략팀</option>
               <option value="54003">54003 · 기술혁신팀</option>
             </select></div>
-          <div class="form-row"><label>담당자</label>
+          <div class="form-row"><label>담당자 <span style="color:var(--red);font-size:10px">*</span></label>
             <input type="text" id="f_manager" placeholder="예) 홍길동"></div>
         </div>
         <div class="form-row"><label>비고</label>
           <textarea id="f_note" placeholder="특이사항, 계약 조건 등"></textarea></div>
       <div class="form-2col">
-        <div class="form-row"><label>사업자등록번호</label>
+        <div class="form-row"><label>사업자등록번호 <span style="color:var(--red);font-size:10px">*</span></label>
           <input type="text" id="f_bizno" placeholder="예) 123-45-67890"></div>
         <div class="form-row"><label>법인등록번호</label>
           <input type="text" id="f_corpno" placeholder="예) 110111-1234567"></div>
@@ -697,8 +702,7 @@ body::before{content:'';position:fixed;inset:0;
           <div style="display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;align-items:center">
             <div style="display:flex;align-items:center;gap:5px">
               <label style="cursor:pointer">
-                <div class="btn" style="background:var(--cost);color:#fff;border:none;font-size:12px;
-                  padding:7px 14px;border-radius:8px;cursor:pointer;white-space:nowrap">📄 계약서 업로드</div>
+                <div class="btn btn-ghost" style="font-size:12px;padding:7px 14px;white-space:nowrap;border-color:rgba(255,112,67,.4);color:var(--cost)">📄 계약서 업로드</div>
                 <input type="file" id="costContractFileInput" accept=".pdf,.doc,.docx,.hwp,.hwpx,.png,.jpg,.jpeg"
                   style="display:none" onchange="analyzeCostContract(this)">
               </label>
@@ -735,6 +739,7 @@ body::before{content:'';position:fixed;inset:0;
             onchange="onLinkProjChange()">
             <option value="">-- 선택해주세요 (필수) --</option>
             <option value="__no_rev__">📭 매출 미발생 (독립 원가)</option>
+            <option value="__pending_rev__">⏳ 추후 연결 예정 (매출 계약 미체결)</option>
           </select>
         </div>
         <div id="linkProjInfo" style="display:none;margin-top:12px;padding:10px 14px;
@@ -759,32 +764,32 @@ body::before{content:'';position:fixed;inset:0;
           </div>
         </div>
 
-        <div class="form-row"><label>협력사명</label>
+        <div class="form-row"><label>협력사명 <span style="color:var(--red);font-size:10px">*</span></label>
           <input type="text" id="fc_name" placeholder="예) 젠컨설팅" oninput="onCostVendorNameInput(this)" list="vm_datalist"><datalist id="vm_datalist"></datalist></div>
 
-        <div class="form-row"><label>매입 계약명 <span style="font-size:10px;color:var(--t2);font-weight:400">(계약서상 정식 명칭)</span></label>
+        <div class="form-row"><label>매입 계약명 <span style="color:var(--red);font-size:10px">*</span> <span style="font-size:10px;color:var(--t2);font-weight:400">(계약서상 정식 명칭)</span></label>
           <input type="text" id="fc_contract_name" placeholder="예) SAP S/4HANA 구축 개발 용역"></div>
 
 
 
         <div class="form-2col">
-          <div class="form-row"><label>사업자등록번호</label>
+          <div class="form-row"><label>사업자등록번호 <span style="color:var(--red);font-size:10px">*</span></label>
             <input type="text" id="fc_bizno" placeholder="예) 123-45-67890"></div>
           <div class="form-row"><label>법인등록번호</label>
             <input type="text" id="fc_corpno" placeholder="예) 110111-1234567"></div>
         </div>
 
         <div class="form-2col">
-          <div class="form-row"><label>계약 시작일</label>
+          <div class="form-row"><label>계약 시작일 <span style="color:var(--red);font-size:10px">*</span></label>
             <input type="date" id="fc_start"></div>
-          <div class="form-row"><label>계약 종료일</label>
+          <div class="form-row"><label>계약 종료일 <span style="color:var(--red);font-size:10px">*</span></label>
             <input type="date" id="fc_end"></div>
         </div>
 
         <div class="form-2col">
-          <div class="form-row"><label>원가 계약금액 (원)</label>
+          <div class="form-row"><label>원가 계약금액 (원) <span style="color:var(--red);font-size:10px">*</span></label>
             <input type="text" id="fc_amount" placeholder="예) 140,000,000" inputmode="numeric" oninput="formatAmtInput(this);recalcAllBillings(&quot;costBillingList&quot;,&quot;fc_amount&quot;,&quot;cb_pct&quot;,&quot;cb_amount&quot;)"></div>
-          <div class="form-row"><label>사업유형</label>
+          <div class="form-row"><label>사업유형 <span style="color:var(--red);font-size:10px">*</span></label>
             <select id="fc_biz_type">
               <option value="">선택</option>
               <option value="SI">SI (구축)</option>
@@ -795,7 +800,7 @@ body::before{content:'';position:fixed;inset:0;
             </select></div>
         </div>
         <div class="form-2col">
-          <div class="form-row"><label>부문 (코스트센터)</label>
+          <div class="form-row"><label>부문 (코스트센터) <span style="color:var(--red);font-size:10px">*</span></label>
             <select id="fc_cc">
               <option value="">선택</option>
               <option value="51001">51001 · 경영지원부문 경영지원팀</option>
@@ -807,24 +812,15 @@ body::before{content:'';position:fixed;inset:0;
               <option value="54002">54002 · DT전략팀</option>
               <option value="54003">54003 · 기술혁신팀</option>
             </select></div>
-          <div class="form-row"><label>담당자</label>
+          <div class="form-row"><label>담당자 <span style="color:var(--red);font-size:10px">*</span></label>
             <input type="text" id="fc_mgr" placeholder="예) 이협력"></div>
         </div>
 
         <div class="form-2col">
-          <div class="form-row"><label>사업유형</label>
-            <select id="fc_biz_type">
-              <option value="">선택</option>
-              <option value="SI">SI (구축)</option>
-              <option value="SM">SM (유지보수)</option>
-              <option value="라이선스">라이선스</option>
-              <option value="MA매출">MA매출</option>
-              <option value="기타">기타</option>
-            </select></div>
-          <div class="form-row"><label>기안 문서번호 <span style="font-size:10px;color:var(--t2);font-weight:400">(기안서 업로드 시 자동 입력)</span></label>
+          <div class="form-row"><label>기안 문서번호 <span style="color:var(--red);font-size:10px">*</span> <span style="font-size:10px;color:var(--t2);font-weight:400">(기안서 업로드 시 자동 입력)</span></label>
             <input type="text" id="fc_docno" placeholder="예) 경영지원-2026-0042"></div>
         </div>
-        <div class="form-row"><label>기안서명 <span style="font-size:10px;color:var(--t2);font-weight:400">(기안서 업로드 시 자동 입력)</span></label>
+        <div class="form-row"><label>기안서명 <span style="color:var(--red);font-size:10px">*</span> <span style="font-size:10px;color:var(--t2);font-weight:400">(기안서 업로드 시 자동 입력)</span></label>
           <input type="text" id="fc_draft_name" placeholder="기안서 업로드 시 자동 입력됩니다"></div>
 
         <div class="form-row"><label>비고</label>
@@ -996,7 +992,11 @@ body::before{content:'';position:fixed;inset:0;
         <button class="tl-sort-btn"        id="sortBtn_amount"   data-s="amount"   onclick="setTlSort(this,'amount')">금액 ↓</button>
       </div>
       <div id="tlFilterLabel" style="font-size:10px;color:var(--t2)"></div>
-      <!-- 범례 (컴팩트) -->
+      <!-- 검색 -->
+      <div class="proj-search-wrap" style="margin-left:auto">
+        <input class="proj-search" id="tlSearch" type="text" placeholder="프로젝트명 검색..."
+          oninput="tlSearchVal=this.value;renderTimeline()">
+      </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto;
         background:var(--s2);border:1px solid var(--b1);border-radius:var(--r2);padding:5px 10px">
         <div class="legend-item"><div class="legend-dot" style="background:#60a5fa;width:7px;height:7px"></div><span style="font-size:9px">선금</span></div>
@@ -1021,6 +1021,10 @@ body::before{content:'';position:fixed;inset:0;
       <button class="month-nav-btn" onclick="changeMonth(1)">▶</button>
       <button class="btn btn-ghost" style="margin-left:8px;font-size:11px" onclick="goToday()">오늘</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+        <div class="proj-search-wrap">
+          <input class="proj-search" id="monthSearch" type="text" placeholder="프로젝트명 검색..."
+            oninput="monthSearchVal=this.value;renderMonthly()">
+        </div>
         <span style="font-size:11px;color:var(--t2)">보기</span>
         <button class="month-nav-btn" id="mview1" onclick="setMonthView(1)" style="font-size:11px;padding:5px 10px">1개월</button>
         <button class="month-nav-btn" id="mview3" onclick="setMonthView(3)" style="font-size:11px;padding:5px 10px;background:var(--c1d);border-color:rgba(62,207,142,.3);color:var(--c1)">3개월</button>
@@ -1062,7 +1066,17 @@ body::before{content:'';position:fixed;inset:0;
         <button class="proj-sort-btn"        id="ps_name"     onclick="setProjSort(this,'name')">이름순 ↑</button>
       </div>
       <div id="projPeriodLabel" style="font-size:11px;color:var(--t2)"></div>
-      <div style="margin-left:auto;font-size:11px;color:var(--t2)" id="projFilterCount"></div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <div class="proj-search-wrap">
+          <input class="proj-search" id="projSearch" type="text" placeholder="프로젝트명 검색..."
+            oninput="projSearchVal=this.value;renderProjectList()">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--c1);border-radius:50%;width:8px;height:8px"></div><span style="font-size:10px">정식</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--c3);border-radius:50%;width:8px;height:8px"></div><span style="font-size:10px">예비</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--t2)" id="projFilterCount"></div>
+      </div>
     </div>
     <div id="projGrid"></div>
   </div>
@@ -1074,6 +1088,9 @@ let projects = [];
 let completedTasks = {};
 var vendorMaster = [];
 let currentMonth = new Date().getMonth(); // 0-based
+var projSearchVal = '';
+var tlSearchVal = '';
+var monthSearchVal = '';
 let currentYear  = new Date().getFullYear();
 let timelineYear = new Date().getFullYear();
 let editingId = null;
@@ -1161,7 +1178,7 @@ function populateLinkProj(){
   var sel = document.getElementById('f_link_proj');
   if(!sel) return;
   var cur = sel.value;
-  sel.innerHTML = '<option value="">-- 선택해주세요 (필수) --</option><option value="__no_rev__">📭 매출 미발생 (독립 원가)</option>';
+  sel.innerHTML = '<option value="">-- 선택해주세요 (필수) --</option><option value="__no_rev__">📭 매출 미발생 (독립 원가)</option><option value="__pending_rev__">⏳ 추후 연결 예정 (매출 계약 미체결)</option>';
   projects.forEach(function(p){
     var opt = document.createElement('option');
     opt.value = p.id;
@@ -1183,6 +1200,19 @@ function onLinkProjChange(){
       +'<span style="font-size:11px;color:var(--t2);margin-left:8px">원가 정보만 입력하세요</span>';
     var cl=document.getElementById('costBillingList');
     if(cl && cl.children.length===0){
+      addCostBillingRow({type:'선금',date:'',amount:'',note:''});
+      addCostBillingRow({type:'잔금',date:'',amount:'',note:''});
+    }
+    return;
+  }
+
+  // 추후 연결 예정
+  if(sel.value === '__pending_rev__'){
+    info.style.display='';
+    info.innerHTML = '<span style="color:var(--c2)">⏳ 매출 계약 체결 후 프로젝트 목록에서 연결할 수 있습니다.</span>'
+      +'<span style="font-size:11px;color:var(--t2);margin-left:8px">원가 정보를 먼저 등록해두세요</span>';
+    var cl2=document.getElementById('costBillingList');
+    if(cl2 && cl2.children.length===0){
       addCostBillingRow({type:'선금',date:'',amount:'',note:''});
       addCostBillingRow({type:'잔금',date:'',amount:'',note:''});
     }
@@ -1235,9 +1265,51 @@ function setModalType(type){
   }
 }
 
-function openModal(projId=null){
+function openCostEditModal(projId, vendorName){
+  var p = projects.find(function(x){return x.id===projId;});
+  if(!p) return;
+  var vendorKey = vendorName.split(' (')[0];
+  var v = (p.vendors||[]).find(function(x){return x.name===vendorKey||x.name.startsWith(vendorKey);});
+  if(!v){ alert('협력사 정보를 찾을 수 없습니다.'); return; }
+
   editingId = projId;
-  _modalType = 'rev';
+  _modalType = 'cost';
+  document.getElementById('modalTitle').textContent = '✏️ 원가 수정';
+  document.getElementById('modalBg').classList.add('open');
+  setModalType('cost');
+
+  populateLinkProj();
+  var linkSel = document.getElementById('f_link_proj');
+  if(linkSel) linkSel.value = projId;
+  onLinkProjChange();
+
+  function setV(id,val){ var el=document.getElementById(id); if(el&&val!==undefined&&val!==null) el.value=val; }
+  setV('fc_name',          v.name);
+  setV('fc_contract_name', v.vcontractName||v.contractName||'');
+  setV('fc_mgr',           v.vmgr||'');
+  setV('fc_bizno',         v.vbizno||'');
+  setV('fc_corpno',        v.vcorpno||'');
+  setV('fc_start',         v.vstart||'');
+  setV('fc_end',           v.vend||'');
+  setV('fc_note',          v.vnote||'');
+  setV('fc_docno',         v.vdocno||'');
+  setV('fc_draft_name',    v.vdraftName||'');
+  setV('fc_cc',            v.vcc||'');
+  if(v.vamount){ var ae=document.getElementById('fc_amount'); if(ae){ae.value=Number(v.vamount).toLocaleString('ko-KR');ae.setAttribute('data-raw',v.vamount);} }
+  if(v.bizType){ var bt=document.getElementById('fc_biz_type'); if(bt) bt.value=v.bizType; }
+  var vstEl=document.querySelector('input[name="fc_vendor_status"][value="'+(v.vstatus||'active')+'"]');
+  if(vstEl) vstEl.checked=true;
+
+  var cl=document.getElementById('costBillingList'); if(cl) cl.innerHTML='';
+  (v.billings||[]).forEach(function(b){ addCostBillingRow(b); });
+
+  pendingCostOrigFiles = JSON.parse(JSON.stringify(v.files||[]));
+  renderCostFileChips();
+
+  window._editingVendorName = v.name;
+}
+
+function openModal(projId=null){
   setModalType('rev');
   document.getElementById('modalTitle').textContent = projId ? '✏️ 프로젝트 수정' : '📋 프로젝트 등록';
   document.getElementById('billingList').innerHTML = '';
@@ -1465,8 +1537,10 @@ function updateBillingRowExtra(select){
 function addBillingRow(data={}){
   const div = document.createElement('div');
   div.className = 'billing-item';
-  var pct = data.amount && document.getElementById('f_amount') && Number(document.getElementById('f_amount').value)
-    ? Math.round(data.amount / Number(document.getElementById('f_amount').value) * 100) : '';
+  var amtEl0 = document.getElementById('f_amount');
+  var totalRaw0 = amtEl0 ? Number((amtEl0.getAttribute('data-raw')||amtEl0.value).replace(/,/g,'')) : 0;
+  var pct = (data.pct!=null && data.pct!=='') ? data.pct
+    : (data.amount && totalRaw0 ? Math.round(data.amount / totalRaw0 * 100) : '');
   var BOND_SUB_TYPES  = ['계약이행','하자보증','계약이행수취','하자보증수취','보증수취'];
   var REPORT_SUB_TYPES = ['중간보고서','완료보고서','검수확인서'];
   var isBondSub   = BOND_SUB_TYPES.indexOf(data.type||'') >= 0;
@@ -1561,6 +1635,20 @@ function saveProject(){
   if(!start)  errors.push('• 계약 시작일');
   if(!end)    errors.push('• 계약 종료일');
   if(!amount) errors.push('• 계약금액');
+
+  var contractName = document.getElementById('f_contract_name') ? document.getElementById('f_contract_name').value.trim() : '';
+  var manager      = document.getElementById('f_manager')       ? document.getElementById('f_manager').value.trim()       : '';
+  var cc           = document.getElementById('f_cc')            ? document.getElementById('f_cc').value                   : '';
+  var bizno        = document.getElementById('f_bizno')         ? document.getElementById('f_bizno').value.trim()         : '';
+  var draftName    = document.getElementById('f_draft_name')    ? document.getElementById('f_draft_name').value.trim()    : '';
+  var bizType      = document.getElementById('f_biz_type')      ? document.getElementById('f_biz_type').value             : '';
+
+  if(!contractName) errors.push('• 계약명');
+  if(!manager)      errors.push('• 담당자');
+  if(!cc)           errors.push('• 소속부서 (코스트센터)');
+  if(!bizno)        errors.push('• 사업자등록번호');
+  if(!draftName)    errors.push('• 기안서명');
+  if(!bizType)      errors.push('• 사업유형');
   // 기안문서번호: 정식등록일 때만 필수
   if(projStatus === 'active' && !docno) errors.push('• 기안 문서번호 (정식등록 시 필수)');
   // 보증보험증권 발행조건 필수 검사
@@ -1658,6 +1746,35 @@ function deleteProject(id){
   projects = projects.filter(p=>p.id!==id);
   save(); renderAll();
 }
+
+function linkPendingRev(pendingId){
+  var pendingProj = projects.find(function(p){return p.id===pendingId;});
+  if(!pendingProj) return;
+  // 연결 가능한 정식 매출 프로젝트 목록 (pendingRev 아닌 것)
+  var revProjects = projects.filter(function(p){
+    return !p.pendingRev && p.client !== '-' && !p.id.startsWith('norev_');
+  });
+  if(!revProjects.length){
+    alert('연결 가능한 매출 프로젝트가 없습니다.\n매출 프로젝트를 먼저 등록해주세요.');
+    return;
+  }
+  var opts = revProjects.map(function(p,i){ return (i+1)+'. '+p.name+' ('+p.client+')'; }).join('\n');
+  var input = prompt('연결할 매출 프로젝트 번호를 입력하세요:\n\n'+opts);
+  if(!input) return;
+  var idx = parseInt(input)-1;
+  if(isNaN(idx)||idx<0||idx>=revProjects.length){ alert('올바른 번호를 입력하세요'); return; }
+  var targetProj = revProjects[idx];
+  // 협력사(vendors)를 대상 프로젝트로 이동
+  (pendingProj.vendors||[]).forEach(function(v){
+    targetProj.vendors = targetProj.vendors||[];
+    targetProj.vendors.push(v);
+  });
+  // 임시 프로젝트 삭제
+  projects = projects.filter(function(p){return p.id!==pendingId;});
+  save(); renderAll();
+  alert('✅ '+targetProj.name+'에 연결되었습니다!');
+}
+
 
 // ════════════ TASKS ════════════
 function getAllTasks(projId=null){
@@ -2039,6 +2156,7 @@ function renderTimeline(){
 
   // 기간 필터: 해당 기간에 걸치는 프로젝트 (완료 포함)
   var allFiltered = sortProjects(projects).filter(function(p){
+    if(tlSearchVal && p.name.toLowerCase().indexOf(tlSearchVal.toLowerCase())<0) return false;
     if(tlFilter==='year') return true;
     var ps=new Date(p.start), pe=new Date(p.end);
     return ps<=range.end && pe>=range.start;
@@ -2088,50 +2206,90 @@ function renderTimeline(){
     var allTasks=getAllTasks(p.id);
     var pStart=new Date(p.start),pEnd=new Date(p.end);
     var progress=calcProgress(p);
-    var hasVendor=(p.vendors||[]).length>0;
-    var vendorNames=(p.vendors||[]).map(function(v){return v.name;}).join(', ');
-    var revByM={},costByM={};
-    for(var mm=0;mm<12;mm++){revByM[mm]=[];costByM[mm]=[];}
+    var vendors=p.vendors||[];
+    var hasVendor=vendors.length>0;
+    var revByM={};
+    for(var mm=0;mm<12;mm++) revByM[mm]=[];
+    // 각 vendor별 costByM
+    var vendorByM=vendors.map(function(){ var o={}; for(var mm=0;mm<12;mm++) o[mm]=[]; return o; });
     allTasks.forEach(function(t){
       var d=new Date(t.date);
       if(d.getFullYear()!==timelineYear) return;
       var mo=d.getMonth();
-      if(t.isCost) costByM[mo].push(t); else revByM[mo].push(t);
+      if(!t.isCost){ revByM[mo].push(t); }
+      else {
+        var vi = t.vendorIdx !== undefined ? t.vendorIdx : 0;
+        if(vendorByM[vi]) vendorByM[vi][mo].push(t);
+      }
     });
-    var bt=pi>0?'border-top:none;':'';
 
-    // 매출 행 - 프로젝트명 셀 rowspan=2
-    h+='<tr>';
-    h+='<td rowspan="2" style="width:100px;padding:6px 6px;border:1px solid var(--b1);'+bt+'background:var(--s1);vertical-align:middle">'
-      +'<div style="font-size:10px;font-weight:700;line-height:1.3;margin-bottom:3px;word-break:keep-all">'+p.name+'</div>'
-      +'<div style="font-size:9px;color:var(--rev);margin-bottom:1px">📍 '+p.client+'</div>'
-      +(hasVendor?'<div style="font-size:9px;color:var(--cost)">🔧 '+vendorNames+'</div>':'')
-      +'<div style="margin-top:5px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden">'
+    // 총 rowspan = 1(매출) + vendors.length (최소1)
+    var totalRows = 1 + Math.max(vendors.length, 1);
+    var bt = pi > 0 ? 'border-top:2px solid var(--b2);' : '';
+
+    // 업체별 색상 팔레트 (leftCell과 행 모두 공유)
+    var vendorColors = ['rgba(255,112,67,', 'rgba(167,139,250,', 'rgba(34,211,238,', 'rgba(249,168,37,'];
+
+    // 왼쪽 프로젝트명 셀 (rowspan)
+    var leftCell = '<td rowspan="'+totalRows+'" style="width:110px;padding:8px 8px;border:1px solid var(--b1);'+bt+'background:var(--s1);vertical-align:top">'
+      +'<div style="font-size:10px;font-weight:700;line-height:1.35;margin-bottom:4px;word-break:keep-all">'+p.name+'</div>'
+      +'<div style="font-size:9px;color:var(--rev);margin-bottom:2px;display:flex;align-items:center;gap:3px">'
+        +'<span style="width:6px;height:6px;border-radius:50%;background:rgba(62,207,142,.8);flex-shrink:0;display:inline-block"></span>'
+        +'<span style="overflow:hidden;text-overflow:ellipsis">'+p.client+'</span>'
+      +'</div>'
+      +(hasVendor ? vendors.map(function(v, vi){
+          var vc = vendorColors[vi % vendorColors.length];
+          return '<div style="font-size:9px;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:3px">'
+            +'<span style="width:6px;height:6px;border-radius:50%;background:'+vc+'0.8);flex-shrink:0;display:inline-block"></span>'
+            +'<span style="overflow:hidden;text-overflow:ellipsis">'+v.name+'</span>'
+            +'</div>';
+        }).join('') : '')
+      +'<div style="margin-top:6px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden">'
         +'<div style="height:100%;width:'+progress+'%;background:var(--c1);border-radius:2px"></div></div>'
       +'<div style="font-size:9px;color:var(--t2);font-family:var(--mono);margin-top:2px">'+progress+'%</div>'
       +'</td>';
-    // 매출 월별 (visMonths 기반)
+
+    // ── 매출 행 ──
+    h += '<tr>';
+    h += leftCell;
     visMonths.forEach(function(m){
       var act=isActive(pStart,pEnd,m);
-      var bg=act?'rgba(62,207,142,.03)':'var(--s1)';
-      if(isNowM(m)) bg='rgba(62,207,142,.07)';
-      var bar=act?'<div style="position:absolute;top:0;left:0;right:0;height:2px;background:rgba(62,207,142,.4)"></div>':'';
+      var bg=act?'rgba(62,207,142,.04)':'var(--s1)';
+      if(isNowM(m)) bg='rgba(62,207,142,.08)';
+      var bar=act?'<div style="position:absolute;top:0;left:0;right:0;height:2px;background:rgba(62,207,142,.5)"></div>':'';
       h+='<td style="padding:4px;border:1px solid var(--b1);border-left:none;'+bt+'background:'+bg+';min-width:60px;position:relative;vertical-align:top">'
         +bar+revByM[m].map(taskChip).join('')+'</td>';
     });
-    h+='</tr>';
+    h += '</tr>';
 
-    // 매입 행
-    h+='<tr>';
-    visMonths.forEach(function(m){
-      var act2=isActive(pStart,pEnd,m);
-      var bg2=act2?'rgba(255,112,67,.03)':'var(--s1)';
-      if(isNowM(m)) bg2='rgba(255,112,67,.06)';
-      var bar2=act2?'<div style="position:absolute;top:0;left:0;right:0;height:2px;background:rgba(255,112,67,.35)"></div>':'';
-      h+='<td style="padding:4px;border:1px solid var(--b1);border-left:none;border-top:none;background:'+bg2+';min-width:60px;position:relative;vertical-align:top">'
-        +bar2+(hasVendor?costByM[m].map(taskChip).join(''):'')+'</td>';
-    });
-    h+='</tr>';
+    // ── 매입 행 (업체별로 각각) ──
+    if(!hasVendor){
+      // 업체 없어도 빈 행 하나
+      h += '<tr>';
+      visMonths.forEach(function(m){
+        var act2=isActive(pStart,pEnd,m);
+        var bg2=act2?'rgba(255,112,67,.02)':'var(--s1)';
+        h+='<td style="padding:4px;border:1px solid var(--b1);border-left:none;border-top:1px dashed var(--b2);background:'+bg2+';min-width:60px;vertical-align:top"></td>';
+      });
+      h += '</tr>';
+    } else {
+      vendors.forEach(function(v, vi){
+        var vc = vendorColors[vi % vendorColors.length];
+        var isLast = vi === vendors.length - 1;
+        h += '<tr>';
+        visMonths.forEach(function(m){
+          var act2=isActive(new Date(v.vstart||p.start), new Date(v.vend||p.end), m);
+          var bg2 = act2 ? vc+'0.04)' : 'var(--s1)';
+          if(isNowM(m)) bg2 = vc+'0.09)';
+          var bar2 = act2 ? '<div style="position:absolute;top:0;left:0;right:0;height:2px;background:'+vc+'0.5)"></div>' : '';
+          // 업체명 라벨 제거 - 왼쪽 패널에 이미 표시됨
+          var nameTag = '';
+          h+='<td style="padding:4px;border:1px solid var(--b1);border-left:none;border-top:1px solid '+(vi===0?'var(--b2)':vc+'0.3)')+';background:'+bg2+';min-width:60px;position:relative;vertical-align:top">'
+            +bar2+nameTag+(vendorByM[vi]?vendorByM[vi][m].map(taskChip).join(''):'')+'</td>';
+        });
+        h += '</tr>';
+      });
+    }
   });
 
   h+='</tbody></table></div>';
@@ -2513,7 +2671,10 @@ function renderProjectList(){
   var today = new Date().toISOString().slice(0,10);
 
   // 기간 필터 + 정렬 적용
-  var filteredProjects = sortProjList(filterProjByPeriod(projects));
+  var filteredProjects = sortProjList(filterProjByPeriod(projects)).filter(function(p){
+    if(projSearchVal && p.name.toLowerCase().indexOf(projSearchVal.toLowerCase())<0) return false;
+    return true;
+  });
   var countEl = document.getElementById('projFilterCount');
   if(countEl){
     if(currentProjPeriod==='all'){
@@ -2527,6 +2688,8 @@ function renderProjectList(){
       +'<p>해당 기간에 해당하는 프로젝트가 없습니다</p></div>';
     return;
   }
+
+  var h = '';
 
   var BILLING_T  = ['선금','중도금','기성','잔금','일금'];
   var GUARANT_T  = ['계약이행','하자보증','보증보험','보증수취','계약이행수취','하자보증수취','보증만료'];
@@ -2600,12 +2763,12 @@ function renderProjectList(){
     var groups = groupByDate(tasks);
     var h = '<table style="width:100%;border-collapse:collapse;table-layout:fixed">';
     h += '<thead><tr style="background:var(--s2);border-bottom:1px solid var(--b1)">'
-      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:80px">구분</th>'
-      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:105px">일자</th>'
-      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:right;width:110px">금액</th>'
-      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left">연계 보증/준공</th>'
+      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:90px">구분</th>'
+      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:120px">일자</th>'
+      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:right;width:130px">금액</th>'
+      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:220px">연계 보증/준공</th>'
       +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:70px">증빙</th>'
-      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:280px">세금계산서 번호 / 발행일</th>'
+      +'<th style="padding:7px 12px;font-size:10px;color:var(--t2);font-weight:600;text-align:left;width:300px">세금계산서 번호 / 발행일</th>'
       +'</tr></thead><tbody>';
 
     groups.forEach(function(g){
@@ -2703,7 +2866,7 @@ function renderProjectList(){
           } else if(REPORT_T2.indexOf(sn)>=0){
             var reportDateKey = s.key + '_report_date';
             var reportDateVal = completedTasks[reportDateKey] || '';
-            extraHtml = '<input class="subtask-input" type="date" style="width:118px;font-size:10px" value="'+reportDateVal+'"'
+            extraHtml = '<input class="subtask-input" type="date" min="2000-01-01" max="2099-12-31" style="font-size:10px" value="'+reportDateVal+'"'
               +' data-inv-key="'+reportDateKey+'" oninput="saveSubExtra(this,\'inv\')" onclick="event.stopPropagation()">';
           } else if(s.note){
             extraHtml = '<span style="font-size:10px;color:var(--t2)">'+s.note+'</span>';
@@ -2735,7 +2898,7 @@ function renderProjectList(){
           ?'<div style="display:flex;gap:5px;align-items:center">'
             +'<input class="subtask-input" style="width:120px;flex-shrink:0;font-size:11px" placeholder="발행번호" value="'+inv+'"'
             +' data-inv-key="'+invKey+'" oninput="saveSubExtra(this,\'inv\')" onclick="event.stopPropagation()">'
-            +'<input class="subtask-input" type="date" style="width:130px;flex-shrink:0;font-size:11px" value="'+iDate+'"'
+            +'<input class="subtask-input" type="date" min="2000-01-01" max="2099-12-31" style="flex-shrink:0;font-size:11px" value="'+iDate+'"'
             +' data-inv-key="'+dateKey+'" oninput="saveSubExtra(this,\'inv\')" onclick="event.stopPropagation()">'
             +'</div>'
           :'<span style="color:var(--t3);font-size:11px">-</span>')
@@ -2769,12 +2932,8 @@ function renderProjectList(){
     : '<div style="font-size:16px;font-weight:700;color:rgba('+rgb+',1);font-family:var(--mono)">'+fmtAmt(amount)+'</div>';
 
   var origStart = hasAmend ? (amendments[0].oldStart || start) : start;
-  var periodCell = hasAmend && end !== origEnd
-    ? '<div style="font-size:10px;color:var(--t2);font-family:var(--mono);text-decoration:line-through;margin-bottom:2px">'+origStart+' ~ '+origEnd+'</div>'
-      +'<div style="font-size:12px;font-family:var(--mono)">'+start+' ~ <span style="color:rgba('+rgb+',.9);font-weight:700">'+end+'</span></div>'
-    : '<div style="font-size:12px;font-family:var(--mono)">'+start+' ~ '+end+'</div>';
 
-  // 변경이력 뱃지/패널 분리
+  // 변경이력 뱃지/패널 분리 (periodCell보다 먼저 선언)
   var histBadges = '', histPanels = '';
   if(hasAmend){
     histBadges = '<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">';
@@ -2816,13 +2975,23 @@ function renderProjectList(){
     });
   }
 
+  var periodCell = hasAmend && end !== origEnd
+    ? '<div style="font-size:10px;color:var(--t2);font-family:var(--mono);text-decoration:line-through;margin-bottom:2px">'+origStart+' ~ '+origEnd+'</div>'
+      +'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+        +'<div style="font-size:12px;font-family:var(--mono)">'+start+' ~ <span style="color:rgba('+rgb+',.9);font-weight:700">'+end+'</span></div>'
+        +(hasAmend ? histBadges : '')
+      +'</div>'
+    : '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+        +'<div style="font-size:12px;font-family:var(--mono)">'+start+' ~ '+end+'</div>'
+        +(hasAmend ? histBadges : '')
+      +'</div>';
+
   return '<div style="background:rgba('+rgb+',.04);border-bottom:1px solid rgba('+rgb+',.2)">'
-    +'<div style="display:grid;grid-template-columns:220px 130px 1fr auto;align-items:stretch">'
+    +'<div style="display:grid;grid-template-columns:220px 140px 1fr 170px auto;align-items:stretch">'
       +'<div style="padding:10px 14px;border-right:1px solid rgba('+rgb+',.15)">'
         +'<div style="font-size:9px;color:var(--t2);font-weight:600;margin-bottom:3px">'+title+'</div>'
         +'<div style="font-size:15px;font-weight:700">'+counterpart+'</div>'
         +(isRev&&p2&&p2.status==='prelim'?'<div style="margin-top:3px"><span style="font-size:10px;font-weight:600;padding:1px 8px;border-radius:10px;background:rgba(249,168,37,.15);color:var(--c3);border:1px solid rgba(249,168,37,.3)">📋 예비등록 — 기안 전 공유 단계</span></div>':'')
-        +(p2&&p2.docno?'<div style="margin-top:4px"><span style="font-size:9px;color:var(--t2);font-weight:600">📄 기안번호 </span><span style="font-size:10px;font-family:var(--mono);color:var(--c2)">'+p2.docno+'</span></div>':'')
       +'</div>'
       +'<div style="padding:10px 14px;border-right:1px solid rgba('+rgb+',.15)">'
         +'<div style="font-size:9px;color:var(--t2);font-weight:600;margin-bottom:3px">💰 계약금액</div>'
@@ -2831,11 +3000,16 @@ function renderProjectList(){
       +'<div style="padding:10px 14px;border-right:1px solid rgba('+rgb+',.15)">'
         +'<div style="font-size:9px;color:var(--t2);font-weight:600;margin-bottom:3px">📅 계약기간</div>'
         +periodCell
-        +(histBadges?'<div style="margin-top:5px">'+histBadges+'</div>':'')
+      +'</div>'
+      +'<div style="padding:10px 14px;border-right:1px solid rgba('+rgb+',.15)">'
+        +'<div style="font-size:9px;color:var(--t2);font-weight:600;margin-bottom:3px">📄 기안번호</div>'
+        +(p2&&p2.docno
+          ?'<div style="font-size:11px;font-family:var(--mono);color:var(--c2);font-weight:600">'+p2.docno+'</div>'
+          :'<div style="font-size:11px;color:var(--t3)">-</div>')
       +'</div>'
       +'<div style="padding:10px 12px;display:flex;align-items:center;gap:6px">'
         +'<button class="proj-action-btn" style="color:var(--c2);font-size:10px;white-space:nowrap" '
-          +'onclick="event.stopPropagation();openModal(\''+projId+'\')">✏️ 수정</button>'
+          +'onclick="event.stopPropagation();'+(isRev ? 'openModal(\''+projId+'\')' : 'openCostEditModal(\''+projId+'\',\''+counterpart.replace(/'/g,"\\'")+'\')')+'">✏️ 수정</button>'
         +'<button class="proj-action-btn" style="color:var(--c3);font-size:10px;white-space:nowrap;border-color:rgba(249,168,37,.3)" '
           +'onclick="event.stopPropagation();'+(isRev?'openAmendModal(\''+projId+'\')':'openVendorAmendModal(\''+projId+'\',\''+counterpart.split(' (')[0]+'\')') +'">'
           +'+ 계약변경</button>'
@@ -2846,8 +3020,6 @@ function renderProjectList(){
 }
 
 
-
-  var h = '';
 
   // 예비/정식 분리
   var prelimProjects = filteredProjects.filter(function(p){ return p.status === 'prelim'; });
@@ -2868,11 +3040,9 @@ function renderProjectList(){
     h_card += '<div class="proj-card" id="pcard_'+p.id+'" style="margin-bottom:12px'+(isPrelim?';border-color:rgba(249,168,37,.5);opacity:.85':'')+'">';
     h_card += '<div class="proj-header" onclick="toggleProjDetail(\''+p.id+'\')"'+(isPrelim?' style="background:rgba(249,168,37,.04)"':'')+'>'+
       '<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;flex-direction:column;justify-content:center;min-width:52px">'
-        +'<div class="proj-status-dot" style="background:'+(isPrelim?'var(--c3)':sc)+'"></div>'
-        +(isPrelim
-          ?'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(249,168,37,.2);color:var(--c3);border:1px solid rgba(249,168,37,.4);white-space:nowrap">📋 예비</span>'
-          :'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(62,207,142,.12);color:var(--c1);border:1px solid rgba(62,207,142,.3);white-space:nowrap">✅ 정식</span>')
+        +'<div class="proj-status-dot" style="background:'+(isPrelim?'var(--c3)':'var(--c1)')+'"></div>'
         +(p.bizType?'<span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:rgba(34,211,238,.1);color:#22d3ee;border:1px solid rgba(34,211,238,.25);white-space:nowrap">'+p.bizType+'</span>':'')
+        +(isPrelim?'<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;background:rgba(249,168,37,.15);color:var(--c3);border:1px solid rgba(249,168,37,.35);white-space:nowrap">예비</span>':'')
       +'</div>'
       +'<div style="flex:1;min-width:0">'
         +'<div class="proj-name" id="pname_'+p.id+'">'+p.name+'</div>'
@@ -2882,13 +3052,32 @@ function renderProjectList(){
           +(deptMgr?'<span style="color:var(--t2)">👤 '+deptMgr+'</span>':'')
         +'</div>'
       +'</div>'
+      +'<div class="proj-period">'+p.start+' ~ '+p.end+'</div>'
+      +(function(){
+          var vAmt2=(p.vendors||[]).reduce(function(s,v){return s+(v.vamount||0);},0);
+          var profit2=p.amount-vAmt2;
+          var pc=profit2>=0?'var(--c1)':'var(--red)';
+          return '<div style="display:flex;align-items:center;gap:12px;flex-shrink:0">'
+            +'<div style="text-align:right">'
+              +'<div style="font-size:9px;color:var(--rev);font-weight:600;letter-spacing:.3px">매출</div>'
+              +'<div class="proj-amount" style="font-size:13px">'+fmtAmt(p.amount)+'</div>'
+            +'</div>'
+            +(vAmt2?'<div style="text-align:right">'
+              +'<div style="font-size:9px;color:var(--cost);font-weight:600;letter-spacing:.3px">매입</div>'
+              +'<div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--cost);white-space:nowrap">'+fmtAmt(vAmt2)+'</div>'
+            +'</div>'
+            +'<div style="text-align:right">'
+              +'<div style="font-size:9px;color:'+pc+';font-weight:600;letter-spacing:.3px">이익</div>'
+              +'<div style="font-family:var(--mono);font-size:13px;font-weight:700;color:'+pc+';white-space:nowrap">'+fmtAmt(profit2)+'</div>'
+            +'</div>':'')
+            +'</div>';
+        })()
       +'<div class="proj-progress-wrap">'
         +'<div class="proj-prog-bar"><div class="proj-prog-fill" style="width:'+progress+'%;background:'+sc+'"></div></div>'
         +'<div class="proj-prog-label">'+statusLbl+' '+progress+'% · '+done+'/'+allTasks.length+'건</div>'
       +'</div>'
-      +'<div class="proj-amount">'+fmtAmt(p.amount)+'</div>'
-      +'<div class="proj-period">'+p.start+' ~ '+p.end+'</div>'
        +'<div style="display:flex;gap:5px" onclick="event.stopPropagation()">'
+         +(p.pendingRev?'<button class="proj-action-btn" style="color:var(--c2);border-color:rgba(91,156,246,.4)" onclick="event.stopPropagation();linkPendingRev(&quot;'+p.id+'&quot;)">🔗 매출 연결</button>':'')
          +'<button class="proj-action-btn" onclick="event.stopPropagation();startInlineEdit(&quot;'+p.id+'&quot;)">✏️ 프로젝트명 변경</button>'
          +'<button class="proj-action-btn" style="color:var(--red)" onclick="event.stopPropagation();deleteProject(&quot;'+p.id+'&quot;)">삭제</button>'
        +'</div>'
@@ -4641,7 +4830,7 @@ function setMonthView(n){
 
 function taskRow(t){
   const isDone   = isTaskFullyDone(t);
-  const isOver   = !isDone && t.date < new Date().toISOString().slice(0,10);
+  const isOver   = !isDone && t.date <= new Date().toISOString().slice(0,10);
   const amtStr   = t.amount > 0 ? fmtAmt(t.amount) : '';
   const typeName = t.type.replace(/^지급/, '');
   const typeCol  = getTypeColor(typeName);
@@ -4714,7 +4903,7 @@ function taskLineRow(t){
   var typeName = t.type.replace(/^지급/,'');
   var isBond   = BOND_TYPES.indexOf(typeName) >= 0;
   var isDone   = isTaskFullyDone(t);
-  var isOver   = !isDone && t.date < new Date().toISOString().slice(0,10);
+  var isOver   = !isDone && t.date <= new Date().toISOString().slice(0,10);
   var typeCol  = getTypeColor(typeName);
   var amtStr   = t.amount > 0 ? fmtAmt(t.amount) : '';
   var proj     = projects.find(function(x){return x.id===t.projId;});
@@ -4793,7 +4982,7 @@ function taskLineRow(t){
         ?'<div style="display:flex;gap:3px" onclick="event.stopPropagation()">'
           +'<input class="subtask-input" style="width:86px;font-size:11px" placeholder="발행번호" value="'+inv+'"'
             +' data-inv-key="'+invKey+'" oninput="saveSubExtra(this,\'inv\')">'
-          +'<input class="subtask-input" type="date" style="width:116px;font-size:11px" value="'+iDate+'"'
+          +'<input class="subtask-input" type="date" min="2000-01-01" max="2099-12-31" style="font-size:11px" value="'+iDate+'"'
             +' data-inv-key="'+dateKey+'" oninput="saveSubExtra(this,\'inv\')">'
           +'</div>'
         :'')
@@ -4873,6 +5062,8 @@ function renderTasksByProject(tasks){
   var html = '';
   projOrder.forEach(function(pid){
     var g = projMap[pid];
+    // 검색 필터
+    if(monthSearchVal && g.name.toLowerCase().indexOf(monthSearchVal.toLowerCase())<0) return;
     var allT = [];
     g.revOrder.forEach(function(c){ allT = allT.concat(g.revGroups[c]); });
     g.costOrder.forEach(function(c){ allT = allT.concat(g.costGroups[c]); });
@@ -4896,8 +5087,8 @@ function renderTasksByProject(tasks){
       +'<span style="font-size:13px;font-weight:700">'+g.name+'</span>'
       +(hasOver?'<span style="font-size:10px;color:var(--red);font-weight:700">⚠️ 지연</span>':'')
       +'<span style="font-size:11px;color:var(--t2);margin-left:2px">'+allT.length+'건</span>'
-      +'<span style="font-size:11px;color:var(--c1);margin-left:auto">완료 '+doneAll+'/'+allT.length+'</span>'
-      +'<span style="font-size:12px;color:var(--t2);transition:transform .2s;display:inline-block;'
+      +'<span style="font-size:11px;color:var(--c1);margin-left:6px">완료 '+doneAll+'/'+allT.length+'</span>'
+      +'<span style="font-size:12px;color:var(--t2);transition:transform .2s;display:inline-block;margin-left:auto;'
         +'transform:'+(isOpen?'rotate(0deg)':'rotate(-90deg)')+'">▼</span>'
       +'</div>';
 
@@ -4964,7 +5155,7 @@ function toggleProjOpen(pid){
 
 function taskDetailRow(t, opts, isVendor){
   var isDone   = isTaskFullyDone(t);
-  var isOver   = !isDone && t.date < new Date().toISOString().slice(0,10);
+  var isOver   = !isDone && t.date <= new Date().toISOString().slice(0,10);
   var typeName = t.type.replace(/^지급/,'');
   var typeCol  = getTypeColor(typeName);
   var BOND_SUB_TYPES = ['계약이행','하자보증','계약이행수취','하자보증수취','보증수취','보증보험'];
@@ -5015,7 +5206,7 @@ function taskDetailRow(t, opts, isVendor){
         ?'<div style="display:flex;gap:3px" onclick="event.stopPropagation()">'
           +'<input class="subtask-input" style="width:86px;font-size:11px" placeholder="발행번호" value="'+inv+'"'
             +' data-inv-key="'+invKey+'" oninput="saveSubExtra(this,\'inv\')">'
-          +'<input class="subtask-input" type="date" style="width:116px;font-size:11px" value="'+iDate+'"'
+          +'<input class="subtask-input" type="date" min="2000-01-01" max="2099-12-31" style="font-size:11px" value="'+iDate+'"'
             +' data-inv-key="'+dateKey+'" oninput="saveSubExtra(this,\'inv\')">'
           +'</div>'
         :'')
@@ -5510,7 +5701,7 @@ function buildSubtasks(t){
       html += '<div class="subtask-actions">';
       html += '<input class="subtask-input" placeholder="발행번호" value="'+inv+'"'
         +' data-inv-key="'+invKey+'" oninput="saveSubExtra(this,\'inv\')" onclick="event.stopPropagation()">';
-      html += '<input class="subtask-input" type="date" value="'+iDate+'"'
+      html += '<input class="subtask-input" type="date" min="2000-01-01" max="2099-12-31" style="font-size:11px" value="'+iDate+'"'
         +' data-inv-key="'+dateKey+'" oninput="saveSubExtra(this,\'inv\')" onclick="event.stopPropagation()">';
       html += '</div>';
     } else if(isFile){
@@ -5608,7 +5799,7 @@ function addCostBillingRow(data){
   div.innerHTML = '<select class="cb_type" style="padding:6px;border-radius:6px;background:var(--s3);border:1px solid var(--b1);color:var(--t0);font-size:12px" onchange="updateBillingRowExtra(this)"><option value="">구분</option>'+typeOpts+'</select>'
     +'<input class="cb_date" type="date" value="'+(data.date||'')+'" style="padding:6px;border-radius:6px;background:var(--s3);border:1px solid var(--b1);color:var(--t0);font-size:12px">'
     +'<div style="display:flex;align-items:center;gap:4px">'
-      +'<input class="cb_pct" type="number" placeholder="%" min="0" max="100" value=""'
+      +'<input class="cb_pct" type="number" placeholder="%" min="0" max="100" value="'+(data.pct!=null&&data.pct!==''?data.pct:'')+'"'
         +' style="padding:6px;border-radius:6px;background:var(--s3);border:1px solid var(--b1);color:var(--c3);font-size:12px;width:60px;text-align:center"'
         +' oninput="calcBillingAmt(this,&quot;fc_amount&quot;,&quot;cb_amount&quot;)">'
       +'<span style="font-size:11px;color:var(--t2)">%</span>'
@@ -5779,10 +5970,60 @@ function saveCostOnly(){
     linkProjId = noRevProj.id;
   }
 
+  // 추후 연결 예정 처리 - 임시 프로젝트 생성 후 pendingRev 플래그
+  if(linkProjId === '__pending_rev__'){
+    var vname3 = document.getElementById('fc_name').value.trim();
+    if(!vname3){ alert('협력사명을 입력하세요'); return; }
+    var pendingProj = {
+      id: 'pending_'+Date.now(),
+      name: (document.getElementById('fc_contract_name').value.trim()||vname3)+' (매출연결대기)',
+      client: '⏳ 매출 계약 미체결',
+      start: document.getElementById('fc_start').value || new Date().toISOString().slice(0,10),
+      end:   document.getElementById('fc_end').value   || new Date().toISOString().slice(0,10),
+      amount: 0,
+      cc: '', bizType: '', dept: '', manager: '', note: '매출 계약 체결 후 연결 예정',
+      billings: [], insurances: [], files: [], amendments: [],
+      opts: {}, createdAt: new Date().toISOString(),
+      pendingRev: true,
+      vendors: [],
+    };
+    projects.push(pendingProj);
+    linkProjId = pendingProj.id;
+  }
+
   var p = projects.find(function(x){return x.id===linkProjId;});
   if(!p){ alert('프로젝트를 찾을 수 없습니다'); return; }
   var vname = document.getElementById('fc_name').value.trim();
   if(!vname){ alert('협력사명을 입력하세요'); return; }
+
+  // ── 원가 필수값 검사 ──
+  var costErrors = [];
+  var fcContractName = document.getElementById('fc_contract_name') ? document.getElementById('fc_contract_name').value.trim() : '';
+  var fcBizno        = document.getElementById('fc_bizno')         ? document.getElementById('fc_bizno').value.trim()         : '';
+  var fcStart        = document.getElementById('fc_start')         ? document.getElementById('fc_start').value                : '';
+  var fcEnd          = document.getElementById('fc_end')           ? document.getElementById('fc_end').value                  : '';
+  var fcAmount       = getRawAmt('fc_amount');
+  var fcCc           = document.getElementById('fc_cc')            ? document.getElementById('fc_cc').value                   : '';
+  var fcMgr          = document.getElementById('fc_mgr')           ? document.getElementById('fc_mgr').value.trim()           : '';
+  var fcDocno        = document.getElementById('fc_docno')         ? document.getElementById('fc_docno').value.trim()         : '';
+  var fcDraftName    = document.getElementById('fc_draft_name')    ? document.getElementById('fc_draft_name').value.trim()    : '';
+
+  if(!fcContractName) costErrors.push('• 매입 계약명');
+  if(!fcBizno)        costErrors.push('• 사업자등록번호');
+  if(!fcStart)        costErrors.push('• 계약 시작일');
+  if(!fcEnd)          costErrors.push('• 계약 종료일');
+  if(!fcAmount)       costErrors.push('• 원가 계약금액');
+  if(!fcCc)           costErrors.push('• 소속부서 (코스트센터)');
+  if(!fcMgr)          costErrors.push('• 담당자');
+  if(!fcDocno)        costErrors.push('• 기안 문서번호');
+  if(!fcDraftName)    costErrors.push('• 기안서명');
+  var fcBizType = document.getElementById('fc_biz_type') ? document.getElementById('fc_biz_type').value : '';
+  if(!fcBizType)      costErrors.push('• 사업유형');
+
+  if(costErrors.length){
+    alert('아래 항목을 입력해주세요:\n\n' + costErrors.join('\n'));
+    return;
+  }
 
   // 보증보험증권 수취조건 필수 검사
   var bondErrors = [];
@@ -5865,13 +6106,7 @@ function _fillAnalyzeResult(parsed){
         if(!amt && b.pct && parsed.amount){
           amt = Math.round(parsed.amount * b.pct / 100);
         }
-        addBillingRow({type:b.type, date:b.date||'', amount:amt, note:b.note||''});
-        // pct 값 세팅
-        if(b.pct){
-          var rows=bl.querySelectorAll('.billing-item');
-          var last=rows[rows.length-1];
-          if(last){ var pctEl=last.querySelector('.b_pct'); if(pctEl) pctEl.value=b.pct; }
-        }
+        addBillingRow({type:b.type, date:b.date||'', amount:amt, note:b.note||'', pct:b.pct||''});
       });
     }
   }
@@ -5905,7 +6140,7 @@ function _fillCostAnalyzeResult(parsed){
       parsed.billings.forEach(function(b){
         var amt=b.amount||0;
         if(!amt && b.pct && totalAmt) amt=Math.round(totalAmt*b.pct/100);
-        addCostBillingRow({type:b.type,date:b.date||'',amount:amt,note:b.note||''});
+        addCostBillingRow({type:b.type,date:b.date||'',amount:amt,note:b.note||'',pct:b.pct!=null?b.pct:''});
       });
     }
   }
@@ -5913,7 +6148,7 @@ function _fillCostAnalyzeResult(parsed){
 }
 function _autoCheckOpts(p, isCost){
   var pre = isCost ? 'fc_opt_' : 'opt_';
-  function setOpt(id, val){ var el=document.getElementById(pre+id); if(el) el.checked=!!val; }
+  function setOpt(id, val){ var el=document.getElementById(pre+id); if(el){ el.checked=!!val; el.dispatchEvent(new Event('change')); } }
   setOpt(isCost?'prepay_bond':'contract_bond',
     p.has_prepayment!==undefined ? p.has_prepayment
       : (JSON.stringify(p).includes('선금')||JSON.stringify(p).includes('착수')));
@@ -6032,9 +6267,9 @@ function _parseContractText(text){
 
   // ── 계약명 추출 ──
   var namePatterns = [
-    // "1. 계약명 : SLB ..." → 다음 숫자항목 전까지
-    /계약명\s*[:：]\s*([^\n]+?)(?:\s+\d+\.\s|\s*$)/,
-    /1\.\s*계약명\s*[:：]?\s*([^\n]+?)(?:\s+\d+\.\s|\s*$)/,
+    // "계약명 : XXX" → 계약기간/날짜/숫자항목 전까지 (최대 60자)
+    /계약명\s*[:：]\s*([가-힣A-Za-z0-9\s\(\)㈜·&\-\/]{2,60}?)(?:\s+(?:계약기간|계약갱신|계약금액|\d+\.)|\s*$)/,
+    /1\.\s*계약명\s*[:：]?\s*([가-힣A-Za-z0-9\s\(\)㈜·&\-\/]{2,60}?)(?:\s+(?:계약기간|계약갱신|\d+\.)|\s*$)/,
     /^\[([^\]]{4,80})\]\s*계약서/,
     /^([^\n]{5,60}(?:구축|개발|용역|서비스|시스템)[^\n]{0,20})\s*계약서/
   ];
@@ -6096,11 +6331,24 @@ function _parseContractText(text){
 
   // 법인등록번호는 현재 폼에 없으므로 skip
 
+  // ── 월단가 감지 → 총액 = 월단가 × 개월수 계산 ──
+  var monthlyUnitMatch = text.match(/유지보수\s*계약금액\s*[\(（]?월간[\)）]?\s*[:：]?\s*[^0-9]*([0-9,]{4,})\s*원/)
+    || text.match(/월\s*(?:단가|금액|계약금액)\s*[:：]?\s*[^0-9]*([0-9,]{4,})\s*원/)
+    || text.match(/(?:월간|매월)\s*[^0-9]*[￦₩]([0-9,]{4,})/);
+  if(monthlyUnitMatch){
+    var monthlyUnit = Number(monthlyUnitMatch[1].replace(/,/g,''));
+    if(monthlyUnit > 0 && result.start && result.end){
+      var muMs=new Date(result.start), muMe=new Date(result.end);
+      var muMonths=(muMe.getFullYear()-muMs.getFullYear())*12+(muMe.getMonth()-muMs.getMonth())+1;
+      if(muMonths>=1){ result.amount = monthlyUnit * muMonths; result._monthlyUnit = monthlyUnit; }
+    }
+  }
+
   // ── 청구 구분 자동 추출 ──
   result.billings = [];
 
   // 월청구 패턴 (분기청구보다 먼저 체크)
-  var monthlyMatch = text.match(/매\s*월\s*(?:청구|지급|납부)|월\s*별\s*(?:청구|지급|납부|정산)|월\s*단위\s*(?:청구|지급)|월\s*(?:청구|지급)\s*(?:방식|조건|으로)/);
+  var monthlyMatch = text.match(/매\s*월\s*(?:청구|지급|납부|정해진)|월\s*별\s*(?:청구|지급|납부|정산)|월\s*단위\s*(?:청구|지급)|월\s*(?:청구|지급)\s*(?:방식|조건|으로)|유지보수[^\n]{0,40}월간|월간\s*(?:계약금액|대금|요금|단가)/);
   if(monthlyMatch){
     if(result.start && result.end){
       var ms=new Date(result.start), me=new Date(result.end);
@@ -6109,7 +6357,7 @@ function _parseContractText(text){
       for(var mo=0;mo<totalMonths;mo++){
         var mdate=new Date(ms.getFullYear(), ms.getMonth()+mo, ms.getDate());
         var mdateStr=mdate.getFullYear()+'-'+String(mdate.getMonth()+1).padStart(2,'0')+'-'+String(mdate.getDate()).padStart(2,'0');
-        var mamt=result.amount&&totalMonths>0?Math.round(result.amount/totalMonths):0;
+        var mamt = result._monthlyUnit || (result.amount&&totalMonths>0 ? Math.round(result.amount/totalMonths) : 0);
         var mpct=totalMonths>0?Math.round(100/totalMonths):0;
         result.billings.push({type:'월청구',date:mdateStr,amount:mamt,note:(mo+1)+'월차 청구',pct:mpct});
       }
@@ -6345,14 +6593,15 @@ function analyzeCostContract(input){
   var PROMPT='이 계약서(매입/원가)에서 아래 정보를 JSON으로만 출력하세요(설명·마크다운 없이 JSON만):\n'
     +'{"name":"협력사(수급인/을) 회사명","contract_name":"계약명(계약서 상단 제목)","vmgr":"협력사 담당자명(없으면 null)","bizno":"협력사 사업자등록번호(xxx-xx-xxxxx형식, 없으면 null)",'
     +'"vstart":"계약시작일 YYYY-MM-DD","vend":"계약종료일 YYYY-MM-DD",'
-    +'"total_amount":총계약금액_숫자(VAT제외_공급가액, 월단가×개월수로계산된총액),'
+    +'"total_amount":총계약금액_숫자(VAT제외_공급가액),'
     +'"monthly_amount":월단가_숫자(월별청구인경우월금액_없으면null),'
-    +'"billing_type":"월청구|분기청구|선금잔금|일금 중 하나(매월청구=월청구, 분기=분기청구, 단건=일금)",'
-    +'"billings":[{"type":"선금|중도금|잔금|일금|월청구|분기청구","date":"YYYY-MM-DD","amount":숫자,"note":"메모"}],'
+    +'"billing_type":"월청구|분기청구|선금잔금|일금 중 하나",'
+    +'"billings":[{"type":"선금|중도금|잔금|일금|월청구|분기청구","date":"YYYY-MM-DD","amount":숫자(VAT제외),"pct":지급비율숫자(예:30),"note":"메모"}],'
     +'"has_prepayment":선금있으면true,"has_midterm":중도금기성있으면true,"has_final":잔금있으면true,'
     +'"has_defect_warranty":하자보증있으면true,"has_inspection":검수확인서있으면true,"vnote":"특이사항(없으면null)"}\n'
-    +'* total_amount: 월단가가 있으면 반드시 월단가×계약개월수로 계산한 총액을 입력\n'
-    +'* billing_type이 월청구이면 billings 배열에 각 월별 항목을 모두 생성(날짜는 해당 월 첫날)\n'
+    +'* billings.pct: 계약서 표에 명시된 지급비율(%). 예) 착수금30%→pct:30, 중도금40%→pct:40, 잔금30%→pct:30\n'
+    +'* total_amount: 월단가가 있으면 월단가×계약개월수로 계산한 총액\n'
+    +'* billing_type이 월청구이면 billings 배열에 각 월별 항목 생성(날짜는 해당 월 첫날)\n'
     +'* 모든 금액은 VAT 제외 공급가액 기준\n'
     +'* 정보가 없는 필드는 null로';
 
@@ -6463,7 +6712,7 @@ function analyzeCostDraft(input){
     var ccCode=null;
     if(parsed.cc_hint){ var hint=parsed.cc_hint.replace(/\s/g,''); for(var k in CC_MAP){ if(hint.indexOf(k)>=0||k.indexOf(hint)>=0){ ccCode=CC_MAP[k]; break; } } }
     if(!ccCode&&parsed.dept){ var dept=parsed.dept.replace(/\s/g,''); for(var k in CC_MAP){ if(dept.indexOf(k)>=0||k.indexOf(dept)>=0){ ccCode=CC_MAP[k]; break; } } }
-    if(ccCode){ var sel=document.getElementById('f_cc'); if(sel){ sel.value=ccCode; var opt=Array.from(sel.options).find(function(o){return o.value===ccCode;}); filled.push('소속부서: '+(opt?opt.text.split('·')[1].trim():ccCode)); } }
+    if(ccCode){ var sel=document.getElementById('fc_cc'); if(sel){ sel.value=ccCode; var opt=Array.from(sel.options).find(function(o){return o.value===ccCode;}); filled.push('소속부서: '+(opt?opt.text.split('·')[1].trim():ccCode)); } }
     if(fileData){ pendingCostOrigFiles.push({name:file.name,type:file.type,data:fileData}); renderCostFileChips(); }
     if(statusEl) statusEl.style.display='none';
     var dk=document.getElementById('costDraftUploadCheck'); if(dk) dk.style.display='';
@@ -6530,7 +6779,7 @@ function removeAmendFile(projId, amIdx, isRev, vendorName, fileIdx){
 
 // ════════════ INIT ════════════
 // 버전이 바뀌면 샘플 데이터 강제 초기화
-const DATA_VERSION = '20260324_v88';
+const DATA_VERSION = '20260324_v89';
 if(localStorage.getItem('ens_version') !== DATA_VERSION){
   localStorage.removeItem('ens_projects');
   localStorage.removeItem('ens_tasks');
